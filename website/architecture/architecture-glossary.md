@@ -1,63 +1,63 @@
 ---
 id: architecture-glossary
-title: Glossary
+title: 术语表
 slug: /glossary
 ---
 
-## Dev Menu
+## Dev Menu（开发菜单）
 
-The in-app developer menu (available in development builds) that offers access to various development and debugging actions. [Learn more about the Dev Menu in the docs](/docs/debugging).
+应用内开发者菜单，在开发构建中可用，用于访问各种开发和调试操作。[在文档中进一步了解 Dev Menu](/docs/debugging)。
 
-## Fabric Renderer
+## Fabric Renderer（Fabric 渲染器）
 
-React Native executes the same React framework code as React for the web. However, React Native renders to general platform views (host views) instead of DOM nodes (which can be considered web’s host views). Rendering to host views is made possible by the Fabric Renderer. Fabric lets React talk to each platform and manage its host view instances. The Fabric Renderer exists in JavaScript and targets interfaces made available by C++ code. [Read more about React renderers in this blog post.](https://overreacted.io/react-as-a-ui-runtime/#renderers)
+React Native 和 Web 端 React 执行的是同一套 React 框架代码。不过，React Native 渲染到通用的平台视图（宿主视图），而不是 DOM 节点（可以把 DOM 节点视为 Web 的宿主视图）。Fabric Renderer 让渲染到宿主视图成为可能。Fabric 让 React 能够与各个平台通信，并管理各自的宿主视图实例。Fabric Renderer 存在于 JavaScript 中，并面向由 C++ 代码暴露的接口。[这篇博客进一步介绍了 React 渲染器。](https://overreacted.io/react-as-a-ui-runtime/#renderers)
 
-## Host platform
+## Host platform（宿主平台）
 
-The platform embedding React Native (e.g., Android, iOS, macOS, Windows).
+嵌入 React Native 的平台，例如 Android、iOS、macOS、Windows。
 
-## Host View Tree (and Host View)
+## Host View Tree（宿主视图树）和 Host View（宿主视图）
 
-Tree representation of views in the host platform (e.g. Android, iOS). On Android, the host views are instances of `android.view.ViewGroup`, `android.widget.TextView`, etc. which are the building blocks of the host view tree. The size and location of each host view are based on `LayoutMetrics` calculated with Yoga, and the style and content of each host view are based on information from the React Shadow Tree.
+宿主平台中的视图树表示，例如 Android 和 iOS。在 Android 上，宿主视图是 `android.view.ViewGroup`、`android.widget.TextView` 等实例，它们构成了宿主视图树。每个宿主视图的大小和位置基于 Yoga 计算出的 `LayoutMetrics`，每个宿主视图的样式和内容则基于 React Shadow Tree 中的信息。
 
-## JavaScript Interfaces (JSI)
+## JavaScript Interfaces（JSI）
 
-A lightweight API to embed a JavaScript engine in a C++ application. Fabric uses it to communicate between Fabric’s C++ core and React.
+一种轻量级 API，用于把 JavaScript 引擎嵌入 C++ 应用。Fabric 使用它在 Fabric 的 C++ 核心和 React 之间通信。
 
-## Java Native Interface (JNI)
+## Java Native Interface（JNI）
 
-An [API to write Java native methods](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/) used to communicate between Fabric’s C++ core and Android, written in Java.
+一个用于[编写 Java native 方法的 API](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/)，用于在 Fabric 的 C++ 核心和以 Java 编写的 Android 之间通信。
 
-## React Component
+## React Component（React 组件）
 
-A JavaScript function or class that instructs how to create a React Element. [Read more about React components, elements in this blog post.](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
+一个 JavaScript 函数或类，用来描述如何创建 React Element。[这篇博客进一步介绍了 React 组件和元素。](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
 
-## React Composite Components
+## React Composite Components（React 复合组件）
 
-React Components with `render` implementations that reduce to other React Composite Components or React Host Components.
+这类 React Component 的 `render` 实现会进一步归约为其他 React Composite Component 或 React Host Component。
 
-## React Host Components or Host Components
+## React Host Components（React 宿主组件）或 Host Components（宿主组件）
 
-React Components whose view implementation is provided by a host view (e.g., `<View>, <Text>` ). On the Web, ReactDOM's Host components would be components like `<p>` and `<div>`.
+视图实现由宿主视图提供的 React Component，例如 `<View>`、`<Text>`。在 Web 上，ReactDOM 的 Host Component 对应的就是 `<p>`、`<div>` 这类组件。
 
-## React Element Tree (and React Element)
+## React Element Tree（React 元素树）和 React Element（React 元素）
 
-A _React Element Tree_ is created by React in JavaScript and consists of React Elements. A _React Element_ is a plain JavaScript object that describes what should appear on the screen. It includes props, styles, and children. React Elements only exist in JavaScript and can represent instantiations of either React Composite Components or React Host Components. [Read more about React components and elements in this blog post.](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
+_React Element Tree_ 由 React 在 JavaScript 中创建，由多个 React Element 组成。_React Element_ 是一个普通 JavaScript 对象，用来描述屏幕上应该出现什么内容。它包含 props、样式和 children。React Element 只存在于 JavaScript 中，可以表示 React Composite Component 或 React Host Component 的实例化结果。[这篇博客进一步介绍了 React 组件和元素。](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
 
-## React Native Framework
+## React Native Framework（React Native 框架）
 
-React Native allows developers to use the [React programming paradigm](https://react.dev/learn/thinking-in-react) to ship applications to native targets. The React Native team is focused on creating **core APIs** and **functionalities** that fit the most general use case when developing native apps.
+React Native 允许开发者使用 [React 编程范式](https://react.dev/learn/thinking-in-react)向原生目标交付应用。React Native 团队专注于创建适用于原生应用开发中最通用场景的**核心 API** 和**功能**。
 
-Shipping native apps to production usually requires a set of tools and libraries that are not provided by default as part of React Native, but are still crucial to ship an app to production. Examples of such tools are: support for publishing applications to a dedicated store or support for routing and navigation mechanisms.
+把原生应用交付到生产环境通常还需要一组工具和库。它们默认并不属于 React Native 的一部分，但对于发布生产应用仍然很关键。例如：支持把应用发布到专门的应用商店，或者支持路由与导航机制。
 
-When those tools and libraries are collected to form a cohesive framework built on top of React Native, we define it as a **React Native Framework**.
+当这些工具和库被组合起来，形成一个构建在 React Native 之上的完整框架时，我们将其定义为 **React Native Framework**。
 
-An example of Open Source React Native Framework is [Expo](https://expo.dev/).
+[Expo](https://expo.dev/) 就是一个开源 React Native Framework 的例子。
 
-## React Shadow Tree (and React Shadow Node)
+## React Shadow Tree（React 影子树）和 React Shadow Node（React 影子节点）
 
-A _React Shadow Tree_ is created by the Fabric Renderer and consists of React Shadow Nodes. A React Shadow Node is an object that represents a React Host Component to be mounted, and contains props that originate from JavaScript. They also contain layout information (x, y, width, height). In Fabric, React Shadow Node objects exist in C++. Before Fabric, these existed in the mobile runtime heap (e.g. Android JVM).
+_React Shadow Tree_ 由 Fabric Renderer 创建，由多个 React Shadow Node 组成。React Shadow Node 是一个对象，表示一个将被挂载的 React Host Component，并包含来自 JavaScript 的 props。它也包含布局信息（x、y、width、height）。在 Fabric 中，React Shadow Node 对象存在于 C++ 中。在 Fabric 之前，这些对象存在于移动端运行时堆中，例如 Android JVM。
 
-## Yoga Tree (and Yoga Node)
+## Yoga Tree（Yoga 树）和 Yoga Node（Yoga 节点）
 
-The _Yoga Tree_ is used by [Yoga](https://www.yogalayout.dev/) to calculate layout information for a React Shadow Tree. Each React Shadow Node typically creates a _Yoga Node_ because React Native employs Yoga to calculate layout. However, this is not a hard requirement. Fabric can also create React Shadow Nodes that do not use Yoga; the implementation of each React Shadow Node determines how to calculate layout.
+_Yoga Tree_ 由 [Yoga](https://www.yogalayout.dev/) 用来为 React Shadow Tree 计算布局信息。每个 React Shadow Node 通常都会创建一个 _Yoga Node_，因为 React Native 使用 Yoga 来计算布局。不过，这不是硬性要求。Fabric 也可以创建不使用 Yoga 的 React Shadow Node；每个 React Shadow Node 的实现决定了它如何计算布局。

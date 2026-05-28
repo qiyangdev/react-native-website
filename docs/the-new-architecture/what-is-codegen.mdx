@@ -1,15 +1,15 @@
-# What is Codegen?
+# 什么是 Codegen？
 
-**Codegen** is a tool to avoid writing a lot of repetitive code. Using Codegen **is not mandatory**: you can write all the generated code manually. However, Codegen generates scaffolding code that could save you a lot of time.
+**Codegen** 是一个用来避免编写大量重复代码的工具。使用 Codegen **不是强制要求**：你也可以手动编写所有生成代码。不过，Codegen 可以生成脚手架代码，从而节省大量时间。
 
-React Native invokes Codegen automatically every time an iOS or Android app is built. Occasionally, you would like to manually run the Codegen scripts to know which types and files are actually generated: this is a common scenario when developing [Turbo Native Modules](/docs/turbo-native-modules-introduction) and Fabric Native Components.
+每次构建 iOS 或 Android 应用时，React Native 都会自动调用 Codegen。有时，你可能希望手动运行 Codegen 脚本，以了解实际生成了哪些类型和文件：在开发 [Turbo 原生模块](/docs/turbo-native-modules-introduction) 和 Fabric 原生组件时，这是一种常见场景。
 
 {/* TODO: Add links to TM and FC */}
 
-## How Codegen Works
+## Codegen 如何工作
 
-**Codegen** is a process that is tightly coupled with a React Native app. The Codegen scripts live inside the `react-native` NPM package and the apps call those scripts at build time.
+**Codegen** 是一个与 React Native 应用紧密耦合的流程。Codegen 脚本位于 `react-native` NPM 包中，应用会在构建时调用这些脚本。
 
-Codegen crawls the folders in your project, starting from a directory you specify in your `package.json`, looking for some specific JS files that contain the specification (or specs) for your custom modules and components. Spec files are JS files written in a typed dialect: React Native currently supports Flow and TypeScript.
+Codegen 会从你在 `package.json` 中指定的目录开始，遍历项目中的文件夹，查找一些特定的 JS 文件。这些文件包含自定义模块和组件的规范（一个或多个 spec）。Spec 文件是用带类型的 JavaScript 方言编写的 JS 文件：React Native 目前支持 Flow 和 TypeScript。
 
-Every time Codegen finds a spec file, it generates boilerplate code associated with it. Codegen generates some C++ glue-code and then it generates platform-specific code, using Java for Android and Objective-C++ for iOS.
+每当 Codegen 找到一个 spec 文件，它都会生成与之对应的样板代码。Codegen 会先生成一些 C++ 胶水代码，然后再生成平台专属代码：Android 使用 Java，iOS 使用 Objective-C++。

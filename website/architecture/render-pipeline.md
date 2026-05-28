@@ -74,7 +74,7 @@ commit 阶段包含两个操作：_Layout Calculation_ 和 _Tree Promotion_。
 **补充细节**
 
 - 这些操作会在后台线程上异步执行。
-- 大部分布局计算完全在 C++ 中执行。不过，有些组件的布局计算依赖*宿主平台*，例如 `Text`、`TextInput` 等。文本的大小和位置与各个*宿主平台*相关，需要在*宿主平台*层计算。为此，Yoga 会调用一个由*宿主平台*定义的函数来计算组件布局。
+- 大部分布局计算完全在 C++ 中执行。不过，有些组件的布局计算依赖**宿主平台**，例如 `Text`、`TextInput` 等。文本的大小和位置与各个**宿主平台**相关，需要在**宿主平台**层计算。为此，Yoga 会调用一个由**宿主平台**定义的函数来计算组件布局。
 
 ### 阶段 3：Mount
 
@@ -96,12 +96,12 @@ mount 阶段会把 _React Shadow Tree_（此时已经包含布局计算数据）
 
 - **Tree Diffing（树差异比较）：** 这一步完全在 C++ 中计算 “previously rendered tree” 和 “next tree” 之间的 diff。结果是一组将要在宿主视图上执行的原子 mutation operation，例如 `createView`、`updateView`、`removeView`、`deleteView` 等。这一步也会对 React Shadow Tree 进行扁平化，以避免创建不必要的宿主视图。关于这个算法的细节，见[视图扁平化](view-flattening.md)。
 - **Tree Promotion（Next Tree → Rendered Tree）：** 这一步以原子方式把 “next tree” 提升为 “previously rendered tree”，这样下一次 mount 阶段就能基于正确的树计算 diff。
-- **View Mounting（视图挂载）：** 这一步会把原子 mutation operation 应用到对应的宿主视图上。它会在*宿主平台*的 UI 线程上执行。
+- **View Mounting（视图挂载）：** 这一步会把原子 mutation operation 应用到对应的宿主视图上。它会在**宿主平台**的 UI 线程上执行。
 
 **补充细节**
 
 - 这些操作会在 UI 线程上同步执行。如果 commit 阶段在后台线程执行，mounting 阶段会被调度到 UI 线程的下一个 “tick”。另一方面，如果 commit 阶段在 UI 线程执行，mounting 阶段也会在同一线程上同步执行。
-- mounting 阶段的调度、实现和执行高度依赖*宿主平台*。例如，mounting 层的渲染器架构目前在 Android 和 iOS 之间有所不同。
+- mounting 阶段的调度、实现和执行高度依赖**宿主平台**。例如，mounting 层的渲染器架构目前在 Android 和 iOS 之间有所不同。
 - 在初始渲染期间，“previously rendered tree” 为空。因此，tree diffing 步骤得到的 mutation operation 列表只包含创建视图、设置 props、把视图彼此添加起来等操作。处理 [React 状态更新](#react-state-updates)时，tree diffing 对性能会更重要。
 - 在当前的生产测试中，一棵 _React Shadow Tree_ 通常包含大约 600-1000 个 _React Shadow Node_（视图扁平化之前）；经过视图扁平化后，树会减少到约 200 个节点。在 iPad 或桌面应用中，这个数量可能增加 10 倍。
 
@@ -186,10 +186,10 @@ React 创建新的 _React Element Tree_ 和 _React Shadow Tree_ 后，必须提�
 ![阶段三：mount](/docs/assets/Architecture/renderer-pipeline/phase-three-mount.png)
 
 - **Tree Promotion（Next Tree → Rendered Tree）：** 这一步以原子方式把 “next tree” 提升为 “previously rendered tree”，这样下一次 mount 阶段就能基于正确的树计算 diff。
-- **Tree Diffing（树差异比较）：** 这一步计算 “previously rendered tree”（**T**）和 “next tree”（**T'**）之间的 diff。结果是一组将要在*宿主视图*上执行的原子 mutation operation。
-  - 在上面的例子中，操作包括：`UpdateView(**Node 3**, {backgroundColor: 'yellow'})`
+- **Tree Diffing（树差异比较）：** 这一步计算 “previously rendered tree”（**T**）和 “next tree”（**T'**）之间的 diff。结果是一组将要在**宿主视图**上执行的原子 mutation operation。
+  - 在上面的例子中，操作包括：`UpdateView(Node 3, {backgroundColor: 'yellow'})`
   - diff 可以在任意当前已挂载的树和任意新树之间计算。渲染器可以跳过某些中间版本的树。
-- **View Mounting（视图挂载）：** 这一步会把原子 mutation operation 应用到对应的*宿主视图*上。在上面的例子中，只有 **View 3** 的 `backgroundColor` 会被更新为 yellow。
+- **View Mounting（视图挂载）：** 这一步会把原子 mutation operation 应用到对应的**宿主视图**上。在上面的例子中，只有 **View 3** 的 `backgroundColor` 会被更新为 yellow。
 
 ![渲染流水线 6](/docs/assets/Architecture/renderer-pipeline/render-pipeline-6.png)
 
@@ -199,9 +199,9 @@ React 创建新的 _React Element Tree_ 和 _React Shadow Tree_ 后，必须提�
 
 对于 _Shadow Tree_ 中的大多数信息，React 是唯一所有者和唯一事实来源。所有数据都源自 React，并且数据流是单向的。
 
-不过，有一个例外，也是一项重要机制：C++ 中的组件可以包含不直接暴露给 JavaScript 的状态，而 JavaScript 不是这些状态的事实来源。C++ 和*宿主平台*会控制这种 _C++ State_。通常，只有当你正在开发一个需要 _C++ State_ 的复杂*宿主组件*时，这才相关。绝大多数*宿主组件*并不需要这个功能。
+不过，有一个例外，也是一项重要机制：C++ 中的组件可以包含不直接暴露给 JavaScript 的状态，而 JavaScript 不是这些状态的事实来源。C++ 和**宿主平台**会控制这种 _C++ State_。通常，只有当你正在开发一个需要 _C++ State_ 的复杂*宿主组件*时，这才相关。绝大多数*宿主组件*并不需要这个功能。
 
-例如，`ScrollView` 使用这套机制把当前 offset 告诉渲染器。更新由*宿主平台*触发，具体来说，是由代表 `ScrollView` 组件的宿主视图触发。offset 信息会被 [measure](https://reactnative.dev/docs/direct-manipulation#measurecallback) 这类 API 使用。由于这次更新源自宿主平台，并且不会影响 React Element Tree，所以这份状态数据会保存在 _C++ State_ 中。
+例如，`ScrollView` 使用这套机制把当前 offset 告诉渲染器。更新由**宿主平台**触发，具体来说，是由代表 `ScrollView` 组件的宿主视图触发。offset 信息会被 [measure](https://reactnative.dev/docs/direct-manipulation#measurecallback) 这类 API 使用。由于这次更新源自宿主平台，并且不会影响 React Element Tree，所以这份状态数据会保存在 _C++ State_ 中。
 
 从概念上说，_C++ State_ 更新类似于上面描述的 [React 状态更新](render-pipeline.md#react-state-updates)。
 但有两个重要区别：

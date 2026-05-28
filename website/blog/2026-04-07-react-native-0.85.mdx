@@ -1,5 +1,5 @@
 ---
-title: 'React Native 0.85 - New Animation Backend, New Jest Preset Package'
+title: 'React Native 0.85 - 新动画后端、新的 Jest Preset 包'
 authors:
   [
     alanleedev,
@@ -15,54 +15,54 @@ tags: [announcement, release]
 date: 2026-04-07
 ---
 
-# React Native 0.85 - New Animation Backend, New Jest Preset Package
+# React Native 0.85 - 新动画后端、新的 Jest Preset 包
 
-Today we are excited to release React Native 0.85!
+今天，我们很高兴发布 React Native 0.85！
 
-This release includes the New Animation Backend, moves the Jest preset to a dedicated package, and includes many other improvements and fixes.
+这个版本带来了新动画后端，将 Jest preset 迁移到了独立包，并包含许多其他改进和修复。
 
-### Highlights
+### 亮点
 
-- [New Animation Backend](/blog/2026/04/07/react-native-0.85#new-animation-backend)
-- [React Native DevTools Improvements](/blog/2026/04/07/react-native-0.85#react-native-devtools-improvements)
-- [Metro TLS Support](/blog/2026/04/07/react-native-0.85#metro-tls-support)
+- [新动画后端](/blog/2026/04/07/react-native-0.85#新动画后端)
+- [React Native DevTools 改进](/blog/2026/04/07/react-native-0.85#react-native-devtools-改进)
+- [Metro TLS 支持](/blog/2026/04/07/react-native-0.85#metro-tls-支持)
 
-### Breaking Changes
+### 破坏性变更
 
-- [Jest Preset Moved to New Package](/blog/2026/04/07/react-native-0.85#jest-preset-moved-to-new-package)
-- [Dropped Support for EOL Node.js Versions](/blog/2026/04/07/react-native-0.85#dropped-support-for-eol-nodejs-versions)
-- [`StyleSheet.absoluteFillObject` Removed](/blog/2026/04/07/react-native-0.85#stylesheetabsolutefillobject-removed)
-- [Other Breaking Changes](/blog/2026/04/07/react-native-0.85#other-breaking-changes)
+- [Jest Preset 迁移到新包](/blog/2026/04/07/react-native-0.85#jest-preset-迁移到新包)
+- [不再支持已 EOL 的 Node.js 版本](/blog/2026/04/07/react-native-0.85#不再支持已-eol-的-nodejs-版本)
+- [移除 `StyleSheet.absoluteFillObject`](/blog/2026/04/07/react-native-0.85#移除-stylesheetabsolutefillobject)
+- [其他破坏性变更](/blog/2026/04/07/react-native-0.85#其他破坏性变更)
 
 {/* truncate */}
 
-## Highlights
+## 亮点
 
-### New Animation Backend
+### 新动画后端
 
-React Native 0.85 introduces the new Shared Animation Backend, built in collaboration with [Software Mansion](https://swmansion.com/).
+React Native 0.85 引入了新的共享动画后端，这是我们与 [Software Mansion](https://swmansion.com/) 合作构建的成果。
 
-This is a new internal engine that powers how animations are applied under the hood for both Animated and Reanimated. By moving the main animation update logic to React Native core, Reanimated is able to land performance improvements that weren't possible before, and can ensure that the update reconciliation process is properly tested and will remain stable with future RN updates.
+这是一个新的内部引擎，负责在底层驱动 Animated 和 Reanimated 的动画应用方式。通过把主要的动画更新逻辑移入 React Native 核心，Reanimated 能够落地过去无法实现的性能改进，并确保更新协调过程经过充分测试，在未来的 RN 更新中保持稳定。
 
-In Animated, you can now animate layout props with native driver (the [limitation once stated here](/docs/animations#caveats) no longer applies).
+在 Animated 中，你现在可以使用 native driver 为布局 props 设置动画（[这里曾经提到的限制](/docs/animations#caveats) 已不再适用）。
 
-|                                              iOS                                              |                                                Android                                                |
-| :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
-| <img src="/blog/assets/0.85-animation-backend-ios.gif" alt="Animation Backend demo on iOS" /> | <img src="/blog/assets/0.85-animation-backend-android.gif" alt="Animation Backend demo on Android" /> |
+|                                         iOS                                          |                                           Android                                            |
+| :----------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
+| <img src="/blog/assets/0.85-animation-backend-ios.gif" alt="iOS 上的动画后端演示" /> | <img src="/blog/assets/0.85-animation-backend-android.gif" alt="Android 上的动画后端演示" /> |
 
-You can find more examples under [`react-native/packages/rn-tester/js/examples/AnimationBackend/`](https://github.com/facebook/react-native/tree/main/packages/rn-tester/js/examples/AnimationBackend).
+你可以在 [`react-native/packages/rn-tester/js/examples/AnimationBackend/`](https://github.com/facebook/react-native/tree/main/packages/rn-tester/js/examples/AnimationBackend) 下找到更多示例。
 
-To opt in, you can enable the experimental channel of React Native [as described in this page](/docs/releases/release-levels).
+如需启用，可以按[这个页面](/docs/releases/release-levels)中的说明启用 React Native 的实验通道。
 
 :::info
 
-This experimental feature will only be available starting from React Native **0.85.1**, which will be released in the immediate future.
+这个实验性功能将从 React Native **0.85.1** 开始可用，该版本会在近期发布。
 
 :::
 
-#### How to animate layout props
+#### 如何为布局 props 设置动画
 
-With the new animation backend, you'll be able to animate Flexbox and position props with native driver in Animated.
+使用新的动画后端后，你将能够在 Animated 中使用 native driver 为 Flexbox 和位置相关 props 设置动画。
 
 ```jsx
 import {
@@ -94,25 +94,25 @@ function MyComponent() {
 }
 ```
 
-### React Native DevTools Improvements
+### React Native DevTools 改进
 
-React Native DevTools received several improvements in this release:
+React Native DevTools 在这个版本中获得了多项改进：
 
-- **Multiple CDP connections**: React Native now supports multiple simultaneous Chrome DevTools Protocol connections, enabling clients such as React Native DevTools, VS Code, and AI agents to connect at the same time. This unlocks richer, composable tooling workflows without unexpectedly ending sessions.
-- **Native tabs on macOS**: We've updated the desktop app to compile for macOS 26, and have also enabled system-level tab handling for power users. Access via **Window > Merge All Windows**, when multiple DevTools windows are open.
+- **多个 CDP 连接**：React Native 现在支持多个并发的 Chrome DevTools Protocol 连接，使 React Native DevTools、VS Code 和 AI agents 等客户端可以同时连接。这解锁了更丰富、可组合的工具工作流，而且不会意外结束会话。
+- **macOS 原生标签页**：我们已将桌面应用更新为针对 macOS 26 编译，同时为高级用户启用了系统级标签页处理。打开多个 DevTools 窗口时，可以通过 **Window > Merge All Windows** 访问。
 
 <img
   src="/blog/assets/0.85-devtools-macos-tabs.png"
-  alt="DevTools native tabs on macOS"
+  alt="macOS 上的 DevTools 原生标签页"
 />
 
-- **Request payload previews**: After being disabled due to a regression, request body previews in the Network Panel are now restored on Android.
+- **请求 payload 预览**：此前由于回归问题被禁用的 Network Panel 请求体预览，现在已在 Android 上恢复。
 
-### Metro TLS Support
+### Metro TLS 支持
 
-The Metro dev server can now accept a TLS configuration object, enabling HTTPS (and WSS for Fast Refresh) during development — useful for testing APIs that enforce secure connections.
+Metro 开发服务器现在可以接收 TLS 配置对象，从而在开发期间启用 HTTPS（以及用于 Fast Refresh 的 WSS）。这对于测试强制要求安全连接的 API 很有用。
 
-Configure it in `metro.config.js`:
+在 `metro.config.js` 中进行配置：
 
 ```js title="metro.config.js"
 const fs = require('fs');
@@ -126,102 +126,102 @@ config.server.tls = {
 
 {/* alex ignore simple */}
 
-For local development, [mkcert](https://github.com/FiloSottile/mkcert) is a simple way to generate a locally-trusted certificate without browser warnings.
+对于本地开发，[mkcert](https://github.com/FiloSottile/mkcert) 是一种简单方式，可以生成本地受信任的证书，并避免浏览器警告。
 
-## Breaking Changes
+## 破坏性变更
 
-### Jest Preset Moved to New Package
+### Jest Preset 迁移到新包
 
-React Native's Jest preset has been extracted from `react-native` into the new `@react-native/jest-preset`, reducing core package size and giving projects more flexibility in their testing setup.
+React Native 的 Jest preset 已从 `react-native` 中抽离到新的 `@react-native/jest-preset` 包中，这会减小核心包体积，并让项目在测试配置上获得更多灵活性。
 
-Update your `jest.config.js` with a one-line change:
+只需对 `jest.config.js` 做一行修改：
 
 ```diff title="jest.config.js"
 - preset: 'react-native',
 + preset: '@react-native/jest-preset',
 ```
 
-### Dropped Support for EOL Node.js Versions
+### 不再支持已 EOL 的 Node.js 版本
 
-React Native 0.85 drops support for end-of-life (EOL) Node.js versions and releases before v20.19.4. Please ensure you are running a supported version of Node.js before upgrading.
+React Native 0.85 不再支持已终止生命周期（EOL）的 Node.js 版本，以及 v20.19.4 之前的版本。升级前请确保你正在运行受支持的 Node.js 版本。
 
-- **Node.js v20** (>=20.19.4) — Supported (Active LTS)
-- **Node.js v21** — Not supported (EOL)
-- **Node.js v22** — Supported (Active LTS)
-- **Node.js v23** — Not supported (EOL)
-- **Node.js v24+** — Supported
+- **Node.js v20**（>=20.19.4）— 受支持（Active LTS）
+- **Node.js v21** — 不支持（EOL）
+- **Node.js v22** — 受支持（Active LTS）
+- **Node.js v23** — 不支持（EOL）
+- **Node.js v24+** — 受支持
 
-### `StyleSheet.absoluteFillObject` Removed
+### 移除 `StyleSheet.absoluteFillObject`
 
-The deprecated `StyleSheet.absoluteFillObject` API has been removed. Use `StyleSheet.absoluteFill` or define your own absolute positioning styles instead.
+已弃用的 `StyleSheet.absoluteFillObject` API 已被移除。请改用 `StyleSheet.absoluteFill`，或自行定义绝对定位样式。
 
 ```diff
 - const styles = StyleSheet.absoluteFillObject;
 + const styles = StyleSheet.absoluteFill;
 ```
 
-### Other Breaking Changes
+### 其他破坏性变更
 
-#### General
+#### 通用
 
-- `Pressable` no longer unmounts event listeners in hidden `Activity`.
-- Removed deprecated C++ type aliases for `ShadowNode::Shared`, `ShadowNode::Weak`, `ShadowNode::Unshared`, `ShadowNode::ListOfWeak`, `ShadowNode::ListOfShared`, `SharedImageManager` and `ContextContainer::Shared` — Those were not in use and consumer libraries should use the type directly.
+- `Pressable` 不再卸载隐藏 `Activity` 中的事件监听器。
+- 移除了 `ShadowNode::Shared`、`ShadowNode::Weak`、`ShadowNode::Unshared`、`ShadowNode::ListOfWeak`、`ShadowNode::ListOfShared`、`SharedImageManager` 和 `ContextContainer::Shared` 等已弃用的 C++ 类型别名。这些别名没有被使用，消费方库应直接使用对应类型。
 
 #### Android
 
-- We re-added `receiveTouches` to `RCTEventEmitter` with default no-op. This is a fix to reduce breaking changes for libraries that haven't migrated away from this method yet.
-- `ReactTextUpdate` is now internal and should not be accessed publicly directly.
-- Multiple classes deprecated or removed as legacy architecture cleanup:
-  - `ReactZIndexedViewGroup` is now deprecated.
-  - `UIManagerHelper` is now deprecated.
-  - `CatalystInstanceImpl` has been removed (it was deprecated).
-  - `NativeViewHierarchyManager` has been fully stubbed out.
+- 我们将 `receiveTouches` 重新加入 `RCTEventEmitter`，并提供默认的 no-op 实现。这项修复可以减少尚未迁移出该方法的库所遇到的破坏性变更。
+- `ReactTextUpdate` 现在是内部 API，不应再被公开直接访问。
+- 作为旧架构清理的一部分，多个类已弃用或移除：
+  - `ReactZIndexedViewGroup` 现已弃用。
+  - `UIManagerHelper` 现已弃用。
+  - `CatalystInstanceImpl` 已被移除（此前已弃用）。
+  - `NativeViewHierarchyManager` 已被完全 stub 化。
 
 #### iOS
 
-- The `RCTHostRuntimeDelegate` is now deprecated and merged into `RCTHostDelegate`.
-- Fixed duplicate symbol error when using `React.XCFramework` (via `fmt` bump to 12.1.0).
+- `RCTHostRuntimeDelegate` 现已弃用，并合并入 `RCTHostDelegate`。
+- 修复了使用 `React.XCFramework` 时的重复符号错误（通过将 `fmt` 升级到 12.1.0）。
 
-## Other Changes
+## 其他变更
 
-- **Metro** bumped to `^0.84.0`.
-- **React** updated to consume Hermes `250829098.0.10`.
-- **Yoga**: `YogaNode` migrated to Kotlin on Android.
-- **Accessibility**: Deprecated `AccessibilityInfo.setAccessibilityFocus` in favor of `AccessibilityInfo.sendAccessibilityEvent`.
-- **TypeScript**: Multiple utility type transformations (`$Values`, `mixed`, `$ReadOnly`, `$ReadOnlyArray`).
-- **Android Build**: Allow specifying dev server IP via `reactNativeDevServerIp` Gradle property.
-- **iOS Build**: Added support for clang virtual file system in `React.XCFramework`.
+- **Metro** 升级到 `^0.84.0`。
+- **React** 更新为使用 Hermes `250829098.0.10`。
+- **Yoga**：Android 上的 `YogaNode` 已迁移到 Kotlin。
+- **无障碍**：弃用 `AccessibilityInfo.setAccessibilityFocus`，改用 `AccessibilityInfo.sendAccessibilityEvent`。
+- **TypeScript**：多个工具类型转换（`$Values`、`mixed`、`$ReadOnly`、`$ReadOnlyArray`）。
+- **Android 构建**：允许通过 `reactNativeDevServerIp` Gradle 属性指定开发服务器 IP。
+- **iOS 构建**：为 `React.XCFramework` 增加了 clang 虚拟文件系统支持。
 
-## Acknowledgements
+## 致谢
 
-React Native 0.85 contains over 604 commits from 58 contributors. Thanks for all your hard work!
+React Native 0.85 包含来自 58 位贡献者的 604 多个提交。感谢大家的辛勤付出！
 
 {/* alex ignore special white */}
 
-We want to send a special thank you to those community members that shipped significant contributions in this release.
+我们想特别感谢在这个版本中交付了重要贡献的社区成员。
 
-- [Zeya Peng](https://github.com/zeyap), [Bartłomiej Błoniarz](https://github.com/bartlomiejbloniarz), and [Dawid Małecki](https://github.com/coado) for the Animated Backend
-- [Vitali Zaidman](https://github.com/vzaidman) for Metro TLS
-- [Moti Zilberman](https://github.com/motiz88) for Multiple CDP Connections
-- [Phil Pluckthun](https://github.com/kitten) and [Alex Hunt](https://github.com/huntie) for the Jest Preset migration
+- 感谢 [Zeya Peng](https://github.com/zeyap)、[Bartłomiej Błoniarz](https://github.com/bartlomiejbloniarz) 和 [Dawid Małecki](https://github.com/coado) 为 Animated Backend 所做的贡献
+- 感谢 [Vitali Zaidman](https://github.com/vzaidman) 为 Metro TLS 所做的贡献
+- 感谢 [Moti Zilberman](https://github.com/motiz88) 为多个 CDP 连接所做的贡献
+- 感谢 [Phil Pluckthun](https://github.com/kitten) 和 [Alex Hunt](https://github.com/huntie) 为 Jest Preset 迁移所做的贡献
 
-Moreover, we also want to thank the additional authors that worked on documenting features in this release post:
+此外，我们还要感谢参与记录这篇发布文章中各项功能的其他作者：
 
 {/* TODO: Add blog post co-authors */}
 
-## Upgrade to 0.85
+## 升级到 0.85
 
 :::info
 
-0.85 is now the latest stable version of React Native and 0.82.x moves to unsupported. For more information see [React Native's support policy](https://github.com/reactwg/react-native-releases/blob/main/docs/support.md).
+0.85 现在是 React Native 的最新稳定版本，0.82.x 则转为不受支持。更多信息请参阅 [React Native 支持政策](https://github.com/reactwg/react-native-releases/blob/main/docs/support.md)。
 
 :::
 
-#### Upgrading
+#### 升级
 
-Please use the [React Native Upgrade Helper](https://react-native-community.github.io/upgrade-helper/) to view code changes between React Native versions for existing projects, in addition to the [Upgrading docs](/docs/upgrading).
+对于现有项目，请使用 [React Native Upgrade Helper](https://react-native-community.github.io/upgrade-helper/) 查看不同 React Native 版本之间的代码变更，同时也可参考[升级文档](/docs/upgrading)。
 
-#### Create a new project
+#### 创建新项目
 
 ```sh
 npx @react-native-community/cli@latest init MyProject --version latest
@@ -229,4 +229,4 @@ npx @react-native-community/cli@latest init MyProject --version latest
 
 #### Expo
 
-If you use Expo, the next SDK, SDK 56, will include React Native 0.85.
+如果你使用 Expo，下一个 SDK（SDK 56）将包含 React Native 0.85。

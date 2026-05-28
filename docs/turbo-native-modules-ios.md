@@ -1,48 +1,48 @@
 ---
 id: turbo-native-modules-ios
-title: 'Turbo Native Modules: iOS'
+title: 'Turbo 原生模块：iOS'
 ---
 
 import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import constants from '@site/core/TabsConstants';
 
-Now it's time to write some iOS platform code to make sure `localStorage` survives after the application is closed.
+现在该编写一些 iOS 平台代码了，确保应用关闭后 `localStorage` 中的数据仍然保留。
 
-## Prepare your Xcode Project
+## 准备 Xcode 项目
 
-We need to prepare your iOS project using Xcode. After completing these **6 steps** you'll have `RCTNativeLocalStorage` that implements the generated `NativeLocalStorageSpec` interface.
+我们需要使用 Xcode 准备 iOS 项目。完成下面 **6 个步骤**后，你将得到一个实现了生成接口 `NativeLocalStorageSpec` 的 `RCTNativeLocalStorage`。
 
-1. Open the CocoaPods generated Xcode Workspace:
+1. 打开 CocoaPods 生成的 Xcode Workspace：
 
 ```bash
 cd ios
 open TurboModuleExample.xcworkspace
 ```
 
-<img className="half-size" alt="Open Xcode Workspace" src="/docs/assets/turbo-native-modules/xcode/1.webp" />
+<img className="half-size" alt="打开 Xcode Workspace" src="/docs/assets/turbo-native-modules/xcode/1.webp" />
 
-2. Right click on app and select <code>New Group</code>, call the new group `NativeLocalStorage`.
+2. 右键点击 app，选择 <code>New Group</code>，并将新 group 命名为 `NativeLocalStorage`。
 
-<img className="half-size" alt="Right click on app and select New Group" src="/docs/assets/turbo-native-modules/xcode/2.webp" />
+<img className="half-size" alt="右键点击 app 并选择 New Group" src="/docs/assets/turbo-native-modules/xcode/2.webp" />
 
-3. In the `NativeLocalStorage` group, create <code>New</code>→<code>File from Template</code>.
+3. 在 `NativeLocalStorage` group 中，创建 <code>New</code>→<code>File from Template</code>。
 
-<img className="half-size" alt="Create a new file using the Cocoa Touch Class template" src="/docs/assets/turbo-native-modules/xcode/3.webp" />
+<img className="half-size" alt="使用 Cocoa Touch Class 模板创建新文件" src="/docs/assets/turbo-native-modules/xcode/3.webp" />
 
-4. Use the <code>Cocoa Touch Class</code>.
+4. 使用 <code>Cocoa Touch Class</code>。
 
-<img className="half-size" alt="Use the Cocoa Touch Class template" src="/docs/assets/turbo-native-modules/xcode/4.webp"  />
+<img className="half-size" alt="使用 Cocoa Touch Class 模板" src="/docs/assets/turbo-native-modules/xcode/4.webp"  />
 
-5. Name the Cocoa Touch Class <code>RCTNativeLocalStorage</code> with the <code>Objective-C</code> language.
+5. 将 Cocoa Touch Class 命名为 <code>RCTNativeLocalStorage</code>，并选择 <code>Objective-C</code> 语言。
 
-<img className="half-size" alt="Create an Objective-C RCTNativeLocalStorage class" src="/docs/assets/turbo-native-modules/xcode/5.webp" />
+<img className="half-size" alt="创建 Objective-C RCTNativeLocalStorage 类" src="/docs/assets/turbo-native-modules/xcode/5.webp" />
 
-6. Rename <code>RCTNativeLocalStorage.m</code> → <code>RCTNativeLocalStorage.mm</code> making it an Objective-C++ file.
+6. 将 <code>RCTNativeLocalStorage.m</code> 重命名为 <code>RCTNativeLocalStorage.mm</code>，使它成为 Objective-C++ 文件。
 
-<img className="half-size" alt="Convert to and Objective-C++ file" src="/docs/assets/turbo-native-modules/xcode/6.webp" />
+<img className="half-size" alt="转换为 Objective-C++ 文件" src="/docs/assets/turbo-native-modules/xcode/6.webp" />
 
-## Implement localStorage with NSUserDefaults
+## 使用 NSUserDefaults 实现 localStorage
 
-Start by updating `RCTNativeLocalStorage.h`:
+首先更新 `RCTNativeLocalStorage.h`：
 
 ```objc title="NativeLocalStorage/RCTNativeLocalStorage.h"
 //  RCTNativeLocalStorage.h
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 ```
 
-Then update our implementation to use `NSUserDefaults` with a custom [suite name](https://developer.apple.com/documentation/foundation/nsuserdefaults/1409957-initwithsuitename).
+然后更新实现，使用带自定义 [suite name](https://developer.apple.com/documentation/foundation/nsuserdefaults/1409957-initwithsuitename) 的 `NSUserDefaults`。
 
 ```objc title="NativeLocalStorage/RCTNativeLocalStorage.mm"
 //  RCTNativeLocalStorage.m
@@ -117,15 +117,15 @@ static NSString *const RCTNativeLocalStorageKey = @"local-storage";
 @end
 ```
 
-Important things to note:
+需要注意的事项：
 
-- You can use Xcode to jump to the Codegen `@protocol NativeLocalStorageSpec`. You can also use Xcode to generate stubs for you.
+- 你可以使用 Xcode 跳转到 Codegen 生成的 `@protocol NativeLocalStorageSpec`。也可以让 Xcode 为你生成 stub。
 
 ## Register the Native Module in your app
 
-The last step consist in updating the `package.json` to tell React Native about the link between the JS specs of the Native Module and the concrete implementation of those specs in native code.
+最后一步是更新 `package.json`，告诉 React Native 原生模块的 JS specs 与这些 specs 在原生代码中的具体实现之间的对应关系。
 
-Modify the `package.json` as it follows:
+按如下方式修改 `package.json`：
 
 ```json title="package.json"
      "start": "react-native start",
@@ -150,7 +150,7 @@ Modify the `package.json` as it follows:
    "dependencies": {
 ```
 
-At this point, you need to re-install the pods to make sure that codegen runs again to generate the new files:
+此时，你需要重新安装 pods，确保 codegen 再次运行并生成新文件：
 
 ```bash
 # from the ios folder
@@ -158,9 +158,9 @@ bundle exec pod install
 open TurboModuleExample.xcworkspace
 ```
 
-If you now build your application from Xcode, you should be able to build successfully.
+如果现在从 Xcode 构建应用，应该可以成功构建。
 
-## Build and run your code on a Simulator
+## 在模拟器上构建并运行代码
 
 <Tabs groupId="package-manager" queryString defaultValue={constants.defaultPackageManager} values={constants.packageManagers}>
 <TabItem value="npm">

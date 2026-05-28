@@ -1,13 +1,13 @@
 ---
 id: turbo-native-modules-android
-title: 'Turbo Native Modules: Android'
+title: 'Turbo 原生模块：Android'
 ---
 
 import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import constants from '@site/core/TabsConstants';
 
-Now it's time to write some Android platform code to make sure `localStorage` survives after the application is closed.
+现在该编写一些 Android 平台代码了，确保应用关闭后 `localStorage` 中的数据仍然保留。
 
-The first step is to implement the generated `NativeLocalStorageSpec` interface:
+第一步是实现生成的 `NativeLocalStorageSpec` 接口：
 
 <Tabs groupId="android-language" queryString defaultValue={constants.defaultAndroidLanguage} values={constants.androidLanguages}>
 <TabItem value="java">
@@ -113,7 +113,7 @@ class NativeLocalStorageModule(reactContext: ReactApplicationContext) : NativeLo
 </TabItem>
 </Tabs>
 
-Next we need to create `NativeLocalStoragePackage`. It provides an object to register our Module in the React Native runtime, by wrapping it as a Base Native Package:
+接下来需要创建 `NativeLocalStoragePackage`。它会将模块包装为 Base Native Package，并提供一个对象，用来把我们的模块注册到 React Native 运行时中：
 
 <Tabs groupId="android-language" queryString defaultValue={constants.defaultAndroidLanguage} values={constants.androidLanguages}>
 <TabItem value="java">
@@ -201,12 +201,12 @@ class NativeLocalStoragePackage : BaseReactPackage() {
 </TabItem>
 </Tabs>
 
-Finally, we need to tell the React Native in our main application how to find this `Package`. We call this "registering" the package in React Native.
+最后，我们需要告诉主应用中的 React Native 如何找到这个 `Package`。我们称之为在 React Native 中“注册”这个 package。
 
-In this case, you add it to be returned by the [getPackages](https://github.com/facebook/react-native/blob/8d8b8c343e62115a5509e1aed62047053c2f6e39/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactNativeHost.java#L233) method.
+在这个例子中，你需要把它加入 [getPackages](https://github.com/facebook/react-native/blob/8d8b8c343e62115a5509e1aed62047053c2f6e39/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactNativeHost.java#L233) 方法返回的列表中。
 
 :::info
-Later you’ll learn how to distribute your Native Modules as [npm packages](the-new-architecture/create-module-library.mdx#publish-the-library-on-npm), which our build tooling will autolink for you.
+稍后你将学习如何将原生模块作为 [npm package](the-new-architecture/create-module-library.mdx#publish-the-library-on-npm) 发布，我们的构建工具会自动为你完成 autolink。
 :::
 
 <Tabs groupId="android-language" queryString defaultValue={constants.defaultAndroidLanguage} values={constants.androidLanguages}>
@@ -338,7 +338,7 @@ class MainApplication : Application(), ReactApplication {
 </TabItem>
 </Tabs>
 
-You can now build and run your code on an emulator:
+现在可以在模拟器上构建并运行代码：
 
 <Tabs groupId="package-manager" queryString defaultValue={constants.defaultPackageManager} values={constants.packageManagers}>
 <TabItem value="npm">

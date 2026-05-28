@@ -1,6 +1,6 @@
 ---
 id: fabric-native-components-introduction
-title: Fabric Native Components Introduction
+title: Fabric 原生组件简介
 ---
 
 import Tabs from '@theme/Tabs';
@@ -8,34 +8,34 @@ import TabItem from '@theme/TabItem';
 import constants from '@site/core/TabsConstants';
 import {FabricNativeComponentsAndroid,FabricNativeComponentsIOS} from './\_fabric-native-components';
 
-# Native Components
+# 原生组件
 
-If you want to build _new_ React Native Components that wrap around a [Host Component](https://reactnative.dev/architecture/glossary#host-view-tree-and-host-view) like a unique kind of [CheckBox](https://developer.android.com/reference/androidx/appcompat/widget/AppCompatCheckBox) on Android, or a [UIButton](https://developer.apple.com/documentation/uikit/uibutton?language=objc) on iOS, you should use a Fabric Native Component.
+如果你想构建*新的* React Native 组件，用来包装某个[宿主组件（Host Component）](https://reactnative.dev/architecture/glossary#host-view-tree-and-host-view)，例如 Android 上某种独特的 [CheckBox](https://developer.android.com/reference/androidx/appcompat/widget/AppCompatCheckBox)，或 iOS 上的 [UIButton](https://developer.apple.com/documentation/uikit/uibutton?language=objc)，那么应该使用 Fabric 原生组件（Fabric Native Component）。
 
-This guide will show you how to build Fabric Native Components, by implementing a web view component. The steps to doing this are:
+本指南将通过实现一个 Web View 组件，展示如何构建 Fabric 原生组件。步骤如下：
 
-1. Define a JavaScript specification using Flow or TypeScript.
-2. Configure the dependencies management system to generate code from the provided spec and to be auto-linked.
-3. Implement the Native code.
-4. Use the Component in an App.
+1. 使用 Flow 或 TypeScript 定义一份 JavaScript 规范。
+2. 配置依赖管理系统，让它根据提供的规范生成代码，并完成 autolink。
+3. 实现原生代码。
+4. 在应用中使用该组件。
 
-You're going to need a plain template generated application to use the component:
+你需要一个由普通模板生成的应用来使用这个组件：
 
 ```bash
 npx @react-native-community/cli@latest init Demo --install-pods false
 ```
 
-## Creating a WebView Component
+## 创建 WebView 组件
 
-This guide will show you how to create a Web View component. We will be creating the component by using the Android's [`WebView`](https://developer.android.com/reference/android/webkit/WebView) component, and the iOS [`WKWebView`](https://developer.apple.com/documentation/webkit/wkwebview?language=objc) component.
+本指南将展示如何创建一个 Web View 组件。我们会使用 Android 的 [`WebView`](https://developer.android.com/reference/android/webkit/WebView) 组件，以及 iOS 的 [`WKWebView`](https://developer.apple.com/documentation/webkit/wkwebview?language=objc) 组件来创建它。
 
-Let's start by creating the folders structure to hold our component's code:
+先创建用于存放组件代码的文件夹结构：
 
 ```bash
 mkdir -p Demo/{specs,android/app/src/main/java/com/webview}
 ```
 
-This gives you the following layout where you'll working:
+这会得到如下工作目录结构：
 
 ```
 Demo
@@ -44,17 +44,17 @@ Demo
 └── specs
 ```
 
-- The `android/app/src/main/java/com/webview` folder is the folder that will contain our Android code.
-- The `ios` folder is the folder that will contain our iOS code.
-- The `specs` folder is the folder that will contain the Codegen's specification file.
+- `android/app/src/main/java/com/webview` 文件夹用于存放 Android 代码。
+- `ios` 文件夹用于存放 iOS 代码。
+- `specs` 文件夹用于存放 Codegen 的规范文件。
 
-## 1. Define Specification for Codegen
+## 1. 为 Codegen 定义规范
 
-Your specification must be defined in either [TypeScript](https://www.typescriptlang.org/) or [Flow](https://flow.org/) (see [Codegen](the-new-architecture/what-is-codegen) documentation for more details). This is used by Codegen to generate the C++, Objective-C++ and Java to connect your platform code to the JavaScript runtime that React runs in.
+你的规范必须使用 [TypeScript](https://www.typescriptlang.org/) 或 [Flow](https://flow.org/) 定义（更多细节请参阅 [Codegen](the-new-architecture/what-is-codegen) 文档）。Codegen 会使用这份规范生成 C++、Objective-C++ 和 Java 代码，用来把平台代码连接到运行 React 的 JavaScript 运行时。
 
-The specification file must be named `<MODULE_NAME>NativeComponent.{ts|js}` to work with Codegen. The suffix `NativeComponent` is not only a convention, it is actually used by Codegen to detect a spec file.
+规范文件必须命名为 `<MODULE_NAME>NativeComponent.{ts|js}` 才能与 Codegen 配合使用。`NativeComponent` 后缀不仅是一种约定，Codegen 实际上也会用它来检测 spec 文件。
 
-Use this specification for our WebView Component:
+为我们的 WebView 组件使用下面这份规范：
 
 <Tabs groupId="language" queryString defaultValue={constants.defaultJavaScriptSpecLanguage} values={constants.javaScriptSpecLanguages}>
 <TabItem value="typescript">
@@ -109,17 +109,17 @@ export default (codegenNativeComponent<NativeProps>(
 </TabItem>
 </Tabs>
 
-This specification is composed of three main parts, excluding the imports:
+除 imports 以外，这份规范主要由三个部分组成：
 
-- The `WebViewScriptLoadedEvent` is a supporting data type for the data the event needs to pass from native to JavaScript.
-- The `NativeProps` is a definition of the props that we can set on the component.
-- The `codegenNativeComponent` statement allows us to codegenerate the code for the custom component and that defines a name for the component used to match the native implementations.
+- `WebViewScriptLoadedEvent` 是一个辅助数据类型，用于描述事件需要从原生侧传递到 JavaScript 的数据。
+- `NativeProps` 定义了可以在组件上设置的 props。
+- `codegenNativeComponent` 语句让我们可以为自定义组件生成代码，并定义组件名称，用于匹配原生实现。
 
-As with Native Modules, you can have multiple specification files in the `specs/` directory. For more information about the types you can use, and the platform types these map to, see the [appendix](appendix.md#codegen-typings).
+与原生模块一样，你可以在 `specs/` 目录中放置多个规范文件。关于可用类型以及它们映射到的平台类型，请参阅[附录](appendix.md#codegen-typings)。
 
-## 2. Configure Codegen to run
+## 2. 配置 Codegen 运行
 
-The specification is used by the React Native's Codegen tools to generate platform specific interfaces and boilerplate for us. To do this, Codegen needs to know where to find our specification and what to do with it. Update your `package.json` to include:
+React Native 的 Codegen 工具会使用这份规范，为我们生成平台专属接口和样板代码。为此，Codegen 需要知道在哪里找到规范，以及应该如何处理它。更新你的 `package.json`，加入以下内容：
 
 ```json package.json
     "start": "react-native start",
@@ -143,18 +143,18 @@ The specification is used by the React Native's Codegen tools to generate platfo
   "dependencies": {
 ```
 
-With everything wired up for Codegen, we need to prepare our native code to hook into our generated code.
+Codegen 配置完成后，我们需要准备原生代码，将它接入生成的代码。
 
-Note that for iOS, we are declaratively mapping the name of the JS component that is exported by the spec (`CustomWebView`) with the iOS class that will implement the component natively.
+注意，对于 iOS，我们会以声明式方式，将 spec 导出的 JS 组件名称（`CustomWebView`）映射到原生实现该组件的 iOS 类。
 
-## 2. Building your Native Code
+## 2. 构建原生代码
 
-Now it's time to write the native platform code so that when React requires to render a view, the platform can create the right native view and can render it on screen.
+现在该编写原生平台代码了。这样，当 React 需要渲染一个视图时，平台就能创建正确的原生视图，并将它渲染到屏幕上。
 
-You should work through both the Android and iOS platforms.
+你需要同时完成 Android 和 iOS 两个平台的实现。
 
 :::note
-This guide shows you how to create a Native Component that only works with the New Architecture. If you need to support both the New Architecture and the Legacy Architecture, please refer to our [backwards compatibility guide](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/backwards-compat.md).
+本指南展示的是如何创建一个仅适用于新架构的原生组件。如果你需要同时支持新架构和旧架构，请参考我们的[向后兼容指南](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/backwards-compat.md)。
 
 :::
 
@@ -167,9 +167,9 @@ This guide shows you how to create a Native Component that only works with the N
     </TabItem>
 </Tabs>
 
-## 3. Use your Native Component
+## 3. 使用原生组件
 
-Finally, you can use the new component in your app. Update your generated `App.tsx` to:
+最后，你可以在应用中使用这个新组件。将生成的 `App.tsx` 更新为：
 
 ```javascript title="Demo/App.tsx"
 import React from 'react';
@@ -205,11 +205,11 @@ const styles = StyleSheet.create({
 export default App;
 ```
 
-This code creates an app that uses the new `WebView` component we created to load the `react.dev` website.
+这段代码会创建一个应用，使用我们新建的 `WebView` 组件加载 `react.dev` 网站。
 
-The app also shows an alert when the web page is loaded.
+网页加载完成后，应用还会显示一个 alert。
 
-## 4. Run your App using the WebView Component
+## 4. 使用 WebView 组件运行应用
 
 <Tabs groupId="platforms" queryString defaultValue={constants.defaultPlatform}>
 <TabItem value="android" label="Android">
